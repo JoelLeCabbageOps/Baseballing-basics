@@ -15,6 +15,9 @@ public class playerMovement : MonoBehaviour
     public float gravity = -9.81f;
     Vector3 velocity;
     bool touchingGround;
+
+    public GameObject youLosePanel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +45,12 @@ public class playerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && touchingGround)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -9.81f * gravity);
+        }
+
+        if (transform.position.y < -2)
+        {
+            youLosePanel.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 }

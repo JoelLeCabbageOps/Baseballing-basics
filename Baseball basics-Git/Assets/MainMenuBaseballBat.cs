@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BaseballBat : MonoBehaviour
+public class MainMenuBaseballBat : MonoBehaviour
 {
     public float rotateSpeed;
     public float batImpactForce;
 
-    public Transform player;
     public Transform lookTarget;
     public Transform lookGoal;
     public float lookTargetSpeed;
@@ -26,26 +25,25 @@ public class BaseballBat : MonoBehaviour
     private void FixedUpdate()
     {
         FindLookTargetsTarget();
-        BatRotate(); 
+        BatRotate();
     }
 
     void FindLookTargetsTarget()
     {
         Vector3 towardsTarget = lookGoal.position - lookTarget.position;
-            //Vector3.MoveTowards(lookTarget.position, lookGoal.position, 5f * Time.deltaTime);
 
-            if (lookTargetRb.velocity.magnitude > lookTargetSpeed && Vector3.Distance(lookTarget.position, lookGoal.position) > 3)
-            {
-                
-                
-                Mathf.Clamp(lookTargetRb.velocity.magnitude, 0, lookTargetSpeed - 5);
-                lookTargetRb.velocity = towardsTarget;
-            }
-            else if (lookTargetRb.velocity.magnitude < lookTargetSpeed)
-            {
-                lookTargetRb.AddForce(towardsTarget * lookTargetSpeed * Time.deltaTime, ForceMode.VelocityChange);
-            }
-        
+        if (lookTargetRb.velocity.magnitude > lookTargetSpeed && Vector3.Distance(lookTarget.position, lookGoal.position) > 3)
+        {
+
+
+            Mathf.Clamp(lookTargetRb.velocity.magnitude, 0, lookTargetSpeed - 5);
+            lookTargetRb.velocity = towardsTarget;
+        }
+        else if (lookTargetRb.velocity.magnitude < lookTargetSpeed)
+        {
+            lookTargetRb.AddForce(towardsTarget * lookTargetSpeed * Time.deltaTime, ForceMode.VelocityChange);
+        }
+
     }
     void TargetRotate()
     {
@@ -67,9 +65,9 @@ public class BaseballBat : MonoBehaviour
         float singleStep = rotateSpeed * Time.deltaTime;
 
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-      
+
         Debug.DrawRay(transform.position, newDirection, Color.red);
-      
+
         transform.rotation = Quaternion.LookRotation(newDirection);
     }
 
