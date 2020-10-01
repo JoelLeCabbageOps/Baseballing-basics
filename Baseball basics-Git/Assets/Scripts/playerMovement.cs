@@ -16,7 +16,7 @@ public class playerMovement : MonoBehaviour
     Vector3 velocity;
     bool touchingGround;
 
-    public GameObject youLosePanel;
+    public GameObject youLosePanel, inGameCanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +49,7 @@ public class playerMovement : MonoBehaviour
 
         if (transform.position.y < -2)
         {
+            inGameCanvas.SetActive(true);
             youLosePanel.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
         }
