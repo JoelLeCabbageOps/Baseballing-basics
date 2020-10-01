@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
         {
             inGameCanvas.SetActive(true);
             youWinPanel.SetActive(true);
+            youLosePanel.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
         }
     }
