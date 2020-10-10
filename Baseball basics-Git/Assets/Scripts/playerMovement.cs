@@ -18,40 +18,85 @@ public class playerMovement : MonoBehaviour
 
     public GameObject youLosePanel, inGameCanvas;
 
+    public float explosionDelay = 0.5f;
+    public float countDown;
+    bool hasBeenLaunched = false;
+
     // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundDistance);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        cc = GetComponent<CharacterController>();
         touchingGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (touchingGround && velocity.y < 0)
+        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            velocity.y = -9.81f;
+            countDown -= Time.deltaTime;
+        }
+        else
+        {
+            countDown = explosionDelay;
+            hasBeenLaunched = false;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * x + transform.forward * z;
-        cc.Move(move * speed * Time.deltaTime);
-
-        velocity.y += gravity * Time.deltaTime;
-        cc.Move(velocity * Time.deltaTime);
-
-        if (Input.GetButtonDown("Jump") && touchingGround)
+        if (countDown <= 0 && touchingGround)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -9.81f * gravity);
+            Destroy(rb);
+            cc.enabled = true;
+            this.enabled = true;
         }
-
-        if (transform.position.y < -2)
+        if (touchingGround)
         {
-            inGameCanvas.SetActive(true);
-            youLosePanel.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
+            Debug.Log("Hit the ground");  
+        }
+        if (cc.enabled == true) 
+        {
+           
+
+            if (touchingGround && velocity.y < 0)
+            {
+                velocity.y = -9.81f;
+            }
+
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
+
+            Vector3 move = transform.right * x + transform.forward * z;
+            cc.Move(move * speed * Time.deltaTime);
+
+            velocity.y += gravity * Time.deltaTime;
+            cc.Move(velocity * Time.deltaTime);
+
+            if (Input.GetButtonDown("Jump") && touchingGround)
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -9.81f * gravity);
+            }
+
+            if (transform.position.y < -2)
+            {
+                inGameCanvas.SetActive(true);
+                youLosePanel.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
+      
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            
         }
     }
 }

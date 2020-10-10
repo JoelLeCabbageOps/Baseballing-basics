@@ -85,24 +85,34 @@ public class BaseballBat : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        ObjectInformation obInfo = collision.gameObject.GetComponent<ObjectInformation>();
-
-        if (obInfo != null)
+        bool hitPlayer = false;
+        if (collision.gameObject.tag != "Player" && !hitPlayer)
         {
-            obInfo.currentHealth -= 1f;
-        }
+            hitPlayer = false;
 
-        NavMeshAgent agent = collision.transform.GetComponent<NavMeshAgent>();
+            ObjectInformation obInfo = collision.gameObject.GetComponent<ObjectInformation>();
 
-        if (agent != null)
+            if (obInfo != null)
+            {
+                obInfo.currentHealth -= 1f;
+            }
+
+            NavMeshAgent agent = collision.transform.GetComponent<NavMeshAgent>();
+
+            if (agent != null)
+            {
+                // If the agent is found, store it's rigidbody, disable the agent, and add force to the gameObject.
+
+                Rigidbody rb = agent.GetComponent<Rigidbody>();
+
+                agent.enabled = false;
+
+                rb.AddForce(-collision.contacts[0].normal * batImpactForce, ForceMode.Impulse);
+            }
+
+        } else
         {
-            // If the agent is found, store it's rigidbody, disable the agent, and add force to the gameObject.
-
-            Rigidbody rb = agent.GetComponent<Rigidbody>();
-
-            agent.enabled = false;
-
-            rb.AddForce(-collision.contacts[0].normal * batImpactForce, ForceMode.Impulse);
+            hitPlayer = true;
         }
 
     }
