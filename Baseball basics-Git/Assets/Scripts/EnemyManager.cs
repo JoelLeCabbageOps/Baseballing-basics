@@ -11,6 +11,8 @@ public class EnemyManager : MonoBehaviour
 
     private bool canExplode = false, hasExploded = false;
 
+    public GameObject explosionEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +60,8 @@ public class EnemyManager : MonoBehaviour
                     rb.AddExplosionForce(force, explosionPosition, radius);
                     hasExploded = true;
                     Destroy(gameObject);
+                    GameObject explosionEffectObject = Instantiate(explosionEffect, transform.position, Quaternion.identity); //Spawn the explosion particle effect
+                    Destroy(explosionEffectObject, 3f);
                     Debug.Log("KABOOM");
                 }
             }
