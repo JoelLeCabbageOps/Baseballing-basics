@@ -55,7 +55,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3915461800374723807}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0.5}
+  m_LocalPosition: {x: 0, y: -1, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3915461800952715661}
@@ -128,6 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff832b3a5592b9e459a1a43f4fc8590c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 20
+  currentHealth: 0
+  healthBar: {fileID: 0}
   speed: 5.5
   jumpHeight: 0.15
   groundCheck: {fileID: 3915461800374723804}
@@ -136,10 +139,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   gravity: -9.81
+  touchingGround: 0
   youLosePanel: {fileID: 0}
   inGameCanvas: {fileID: 0}
   explosionDelay: 0.5
   countDown: 0
+  rb: {fileID: 0}
 --- !u!136 &3915461800952715699
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -149,7 +154,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 3915461800952715663}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -575,7 +580,7 @@ PrefabInstance:
     - target: {fileID: 969143956159990910, guid: 09f40c868ca1e1443a9facf06ed67bbf,
         type: 3}
       propertyPath: batImpactForce
-      value: 25
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 969143956159990911, guid: 09f40c868ca1e1443a9facf06ed67bbf,
         type: 3}

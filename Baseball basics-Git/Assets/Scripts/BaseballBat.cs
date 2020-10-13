@@ -36,8 +36,6 @@ public class BaseballBat : MonoBehaviour
 
             if (lookTargetRb.velocity.magnitude > lookTargetSpeed && Vector3.Distance(lookTarget.position, lookGoal.position) > 3)
             {
-                
-                
                 Mathf.Clamp(lookTargetRb.velocity.magnitude, 0, lookTargetSpeed - 5);
                 lookTargetRb.velocity = towardsTarget;
             }
@@ -91,6 +89,12 @@ public class BaseballBat : MonoBehaviour
             hitPlayer = false;
 
             ObjectInformation obInfo = collision.gameObject.GetComponent<ObjectInformation>();
+            EnemyManager enemyManager = collision.gameObject.GetComponent<EnemyManager>();
+            
+            if (enemyManager != null)
+            {
+                enemyManager.hasBeenHit = true;
+            }
 
             if (obInfo != null)
             {
@@ -108,6 +112,7 @@ public class BaseballBat : MonoBehaviour
                 agent.enabled = false;
 
                 rb.AddForce(-collision.contacts[0].normal * batImpactForce, ForceMode.Impulse);
+                Debug.Log("The bat hit " + collision.gameObject.name);
             }
 
         } else

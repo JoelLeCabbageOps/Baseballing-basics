@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerMovement : MonoBehaviour
+public class playerMovement : MonoBehaviour // also controls health
 {
+    public float maxHealth;
+    public float currentHealth;
+    public HealthBar healthBar;
+
     public float speed;
     public float jumpHeight; // How many units high the player will jump
 
@@ -14,18 +18,21 @@ public class playerMovement : MonoBehaviour
 
     public float gravity = -9.81f;
     Vector3 velocity;
-    bool touchingGround;
+    public bool touchingGround;
 
     public GameObject youLosePanel, inGameCanvas;
 
     public float explosionDelay = 0.5f;
     public float countDown;
     bool hasBeenLaunched = false;
+    public Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     private void OnDrawGizmos()
@@ -36,17 +43,25 @@ public class playerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentHealth <= 0)
+        {
+            youLosePanel.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+
         cc = GetComponent<CharacterController>();
         touchingGround = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+        //rb = gameObject.GetComponent<Rigidbody>();
         if (rb != null)
         {
             countDown -= Time.deltaTime;
         }
-        else
+        else if (rb == null)
         {
             countDown = explosionDelay;
             hasBeenLaunched = false;
+            rb = gameObject.GetComponent<Rigidbody>();
         }
 
         if (countDown <= 0 && touchingGround)
@@ -98,5 +113,11 @@ public class playerMovement : MonoBehaviour
         {
             
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 }
