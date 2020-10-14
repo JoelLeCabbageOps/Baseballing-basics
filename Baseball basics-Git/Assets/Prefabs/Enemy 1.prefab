@@ -787,7 +787,7 @@ GameObject:
   - component: {fileID: 5333923259599496678}
   m_Layer: 0
   m_Name: Enemy 1
-  m_TagString: CountdownCanvas
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -864,7 +864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delay: 3.5
   radius: 2.5
-  explosionRadius: 0
+  explosionRadius: 10
   force: 1500
   explosionDamage: 10
   countdown: 7

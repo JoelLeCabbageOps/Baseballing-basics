@@ -47,6 +47,7 @@ public class EnemyManager : MonoBehaviour
         if (rb == null && countdown <= 0)
         {
             rb = player.gameObject.AddComponent<Rigidbody>();
+            rb = player.gameObject.GetComponent<Rigidbody>();
             rb.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
@@ -119,8 +120,12 @@ public class EnemyManager : MonoBehaviour
             Debug.Log("rb is null");
             
             rb = player.gameObject.GetComponent<Rigidbody>();
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
-            Debug.Log("the rb is now on " + rb.gameObject.name);
+            if (rb != null)
+            {
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                Debug.Log("the rb is now on " + rb.gameObject.name);
+            }
+
 
         }
     }
@@ -129,21 +134,34 @@ public class EnemyManager : MonoBehaviour
     {
         if (rb != null && canExplode && !hasExploded)
         {
-            Debug.Log(rb.gameObject.name);
-            CharacterController cc = rb.GetComponent<CharacterController>();
-            cc.enabled = false;
-            playerMovement pMove = rb.GetComponent<playerMovement>();
-            if (pMove != null)
-            {
-                pMove.TakeDamage(explosionDamage);
+                playerMovement pMove = rb.GetComponent<playerMovement>();
 
+            if (Vector3.Distance(rb.position, transform.position) < explosionRadius)
+            {
+                Debug.Log(rb.gameObject.name);
+                CharacterController cc = rb.GetComponent<CharacterController>();
+                cc.enabled = false;
+            }
+                if (pMove != null)
+            {
+                if (Vector3.Distance(rb.position, transform.position) < explosionRadius)
+                {
+                    pMove.TakeDamage(explosionDamage);
+                }
+                
                 if (pMove.touchingGround)
                 {
                     pMove.rb = rb;
                 }
-            }  
+            }
+
             Vector3 explosionPosition = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
-            rb.AddExplosionForce(force, explosionPosition, explosionRadius);
+
+            if (Vector3.Distance(rb.position, transform.position) < explosionRadius)
+            {
+                rb.AddExplosionForce(force, explosionPosition, explosionRadius);
+            }
+
             hasExploded = true;
             Destroy(gameObject);
             GameObject explosionEffectObject = Instantiate(explosionEffect, transform.position, Quaternion.identity); //Spawn the explosion particle effect
